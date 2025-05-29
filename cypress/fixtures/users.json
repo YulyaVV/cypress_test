@@ -1,0 +1,12 @@
+[
+    {
+        "username": "ggg",
+        "password": "test",
+        "expectedResult": "success"
+      }, 
+    {
+      "username": "user@test.com",
+      "password": "user123",
+      "expectedResult": "error"
+    }
+  ]
