@@ -5,7 +5,7 @@ const testUsers = require('../../fixtures/users.json')
 describe('Авторизация', () => {
 
   beforeEach(() => {
-    cy.visit('https://farpost-catalog.kubernetes.bazadev.net'); 
+    cy.visit('/'); 
   });
 
   testUsers.forEach((user) => {
