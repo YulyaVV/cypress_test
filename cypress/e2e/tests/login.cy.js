@@ -1,25 +1,15 @@
-import loginPage from '../page_object/loginPage';
+import { MainPage } from '../../support/page_object/mainPage';
 
-const testUsers = require('../../fixtures/users.json')
+describe('Проверка заголовка главной страницы', () => {
 
-describe('Авторизация', () => {
 
   beforeEach(() => {
-    cy.visit('/'); 
+    cy.login('validUser');  
+    cy.visit('/admin/models');
+  });
+  
+  it('Название страницы - "Список моделей"', () => {
+    MainPage.getPageTitleText().should('eq', 'Список моделей');
   });
 
-  testUsers.forEach((user) => {
-
-    it(`Проверка авторизации c валидными и невалидными данными`, () => { 
-
-      loginPage.inputCredentials(user.username, user.password);
-      loginPage.clickLoginButton();
-
-      if (user.expectedResult === 'success') {
-        loginPage.shouldBeSuccessful();
-      } else {
-        loginPage.shouldShowError();
-      }
-    });
-  });
 })

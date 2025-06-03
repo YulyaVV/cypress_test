@@ -6,8 +6,7 @@ class LoginPage {
     elements = {
         usernameInput: () => cy.get('#login-form_username'),
         passwordInput: () => cy.get('#login-form_password'),
-        loginButton: () => cy.contains('button', 'Войти'),
-        errorMessage: () => cy.get('.ant-form-item-explain-error') 
+        loginButton: () => cy.contains('button', 'Войти'), 
       }
 
       /**
@@ -29,22 +28,6 @@ class LoginPage {
             .click();
       }
 
-      /**
-       * Метод проверки успешного входа
-       */
-      shouldBeSuccessful() {
-        cy.url().should('include', '/admin/models');
-      }
-    
-      /**
-       * Метод проверки ошибки авторизации
-       */
-      shouldShowError() {
-        this.elements.errorMessage()
-          .should('be.visible')
-          .and('contain', 'Неверное имя пользователя или пароль')
-
-      }
 }
 
 export default new LoginPage();

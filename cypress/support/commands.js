@@ -23,3 +23,29 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+
+import loginPage from "./page_object/loginPage"
+
+
+Cypress.Commands.add('login', (userType) => {
+    
+    cy.fixture('users.json').then((users) => {
+        const user = users[userType]; 
+
+        
+        cy.session( user.username, () => {
+                cy.visit('/admin/login');
+                loginPage.inputCredentials(user.username, user.password);
+                loginPage.clickLoginButton();  
+            },
+            {
+                validate: () => {                 
+                   // Проверяем, что пользователь действительно залогинен
+                   cy.window().its('localStorage').invoke('getItem', 'token').should('exist');
+                }
+            }       
+        );     
+    });
+});
+
