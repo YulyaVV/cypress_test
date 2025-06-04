@@ -24,28 +24,21 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
+Cypress.Commands.add('loginViaAPI', (userType = 'adminUser') => {
+  cy.fixture('users').then((users) => {
+    const { username, password } = users[userType];
 
-import loginPage from "./page_object/loginPage"
-
-
-Cypress.Commands.add('login', (userType) => {
-    
-    cy.fixture('users.json').then((users) => {
-        const user = users[userType]; 
-
-        
-        cy.session( user.username, () => {
-                cy.visit('/admin/login');
-                loginPage.inputCredentials(user.username, user.password);
-                loginPage.clickLoginButton();  
-            },
-            {
-                validate: () => {                 
-                   // Проверяем, что пользователь действительно залогинен
-                   cy.window().its('localStorage').invoke('getItem', 'token').should('exist');
-                }
-            }       
-        );     
+    cy.request('POST', '/web/auth', { username, password }).then((res) => {
+      expect(res.status).to.eq(200); 
+      window.localStorage.setItem('token', res.body.token); // Сохраняем токен
     });
+  });
 });
 
+Cypress.Commands.add('visitWithAuth', (url) => {
+  // Проверяем наличие токена перед переходом
+  cy.window().then((win) => {
+    win.localStorage.getItem('token');
+  });
+  cy.visit(url); // Переходим на страницу
+});
