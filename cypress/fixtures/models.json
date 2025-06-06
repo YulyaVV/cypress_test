@@ -1,0 +1,17 @@
+{
+  "baseModel": {
+    "name": "test_model_",
+    "category": "disc"
+  },
+
+  "modelWithAttributes":{
+    "name": "test_model_",
+    "description": "",
+    "isActive": false,
+    "attributes": {
+        "diskType": "разборный",
+        "color": ["Серый"]
+    },
+    "variants":[]
+}
+}
