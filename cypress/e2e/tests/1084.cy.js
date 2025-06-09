@@ -1,31 +1,46 @@
-import models from '../../fixtures/models.json';
+import apiRequests from "../../support/api Requests";
 
 describe('Проверка атрибутов моделей', () => {
     
     before(() => {
     cy.loginViaAPI();
-    
-    
-    //Создаем модель с атрибутами
-    cy.createModel().then((model1) => {
-      models.modelWithAttributes = model1;
-      return cy.addModelAttributes(model1.id);
+
+    cy.fixture('models').then((fixture) => {
+
+      // Создаем модель без атрибутов
+      apiRequests.createModel(fixture.baseModel);
+
+      // Создаем модель с атрибутами
+      apiRequests.createModel(fixture.baseModel).then((response) => {
+        cy.window().then((win) => {
+            cy.request({
+                method: 'POST',
+                url: `/web/models/${response.body.id}`,
+                headers: { 
+                    Authorization: `Bearer ${win.localStorage.getItem('token')}` 
+                },
+                body: {
+                    name: fixture.modelWithAttributes.name + Date.now(),
+                    description: fixture.modelWithAttributes.description,
+                    isActive: fixture.modelWithAttributes.isActive,
+                    attributes: fixture.modelWithAttributes.attributes,
+                    variants: fixture.modelWithAttributes.variants
+                }
+            });
+        });
+        });
     });
-    
+})
 
-    // Создаем модель без атрибутов
-    cy.createModel().then((model2) => {
-        models.baseModel = model2;
-      });
-  });
-
-
+   
   beforeEach(() => {
     cy.visitWithAuth('/admin/models?category=disc'); 
     
   });
+  
 
   it ('не знаю какое придумать название теста', () => {
     
-  })
+  });
 })
+
